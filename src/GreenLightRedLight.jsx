@@ -6,6 +6,7 @@ const GreenLightRedLight = () => {
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [scoreboard,setScoreboard] = useState([]);
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -76,7 +77,16 @@ const GreenLightRedLight = () => {
     setGameStarted(false);
     setGameOver(true);
     if (win) {
+      setScoreboard([
+        ...scoreboard,
+        {
+          name: userData.name,
+          level: userData.difficulty,
+          completedat: (timer/1000).toFixed(1),
+        },
+      ]);
       alert("You win!");
+      console.log(scoreboard)
     } else {
       alert("Game Over!");
     }
@@ -128,7 +138,7 @@ const GreenLightRedLight = () => {
         textAlign: "center",
         backgroundImage: "/bg.jpg",
       }}
-      className="flex flex-col bg-[url('BG.jpg')] h-screen bg-center bg-no-repeat bg-cover"
+      className="flex flex-col bg-[url('BG.jpg')] min-h-screen bg-center bg-no-repeat bg-cover py-6"
     >
       {gameStarted ? (
         <div className="flex flex-col gap-5 backdrop-blur-sm w-[85%] sm:w-[60%] mx-auto bg-[#ffffff70] shadow-md mt-8 py-6 rounded-xl">
@@ -148,7 +158,7 @@ const GreenLightRedLight = () => {
           </h1>
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col gap-5 mx-auto  w-[90%] sm:w-[85%] py-5 sm:py-10"
+            className="flex flex-col gap-5 mx-auto  w-[90%] sm:w-[85%] py-3 sm:py-10"
           >
             <div className="flex flex-col sm:flex-row items-start sm:items-center  sm:justify-between gap-1 sm:gap-5">
               <label className="text-base sm:text-base md:text-xl font-semibold">
@@ -208,6 +218,27 @@ const GreenLightRedLight = () => {
               Start Game
             </button>
           </form>
+          <div className=" flex flex-col gap-5 mx-auto  w-[90%] sm:w-[85%] py-5 sm:py-10">
+            <p className="text-2xl md:text-4xl font-bold text-gray-800">
+              ScoreBoard
+            </p>
+            <table className=" border border-black text-base sm:text-base md:text-xl">
+              <tr className="border border-black">
+                <th>Name</th>
+                <th>Level</th>
+                <th>Completed At</th>
+              </tr>
+              {scoreboard.map((score, idx) => {
+                return (
+                  <tr key={idx} className="border border-black ">
+                    <td>{score.name}</td>
+                    <td>{score.level}</td>
+                    <td>{score.completedat}</td>
+                  </tr>
+                );
+              })}
+            </table>
+          </div>
         </div>
       )}
     </div>
